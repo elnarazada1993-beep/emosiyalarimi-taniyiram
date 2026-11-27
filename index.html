@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="az">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Emosiyalarımı tanıyıram — məktəb şagirdləri üçün hissləri tanımaq, adlandırmaq və idarə etmək üzrə interaktiv təhsil saytı." />
+  <title>Emosiyalarımı tanıyıram</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="bg-decoration" aria-hidden="true">
+    <span class="blob blob-1"></span>
+    <span class="blob blob-2"></span>
+    <span class="blob blob-3"></span>
+  </div>
+
+  <header class="site-header">
+    <div class="container header-inner">
+      <button type="button" class="brand-btn" id="brandHomeBtn" aria-label="Emosiyalarımı tanıyıram — Ana səhifəyə qayıt">
+        <span class="brand-icon" aria-hidden="true">🌈</span>
+        <span class="brand-name">Emosiyalarımı tanıyıram</span>
+      </button>
+
+      <nav class="progress-nav" id="progressNav" aria-label="Mərhələlər" hidden>
+        <ol class="step-list">
+          <li class="step-item" data-step="emotions">
+            <span class="step-dot">1</span>
+            <span class="step-label">Emosiya</span>
+          </li>
+          <li class="step-item" data-step="questions">
+            <span class="step-dot">2</span>
+            <span class="step-label">Suallar</span>
+          </li>
+          <li class="step-item" data-step="result">
+            <span class="step-dot">3</span>
+            <span class="step-label">Nəticə</span>
+          </li>
+        </ol>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container main-content" id="appRoot">
+    <!-- 1. Ana səhifə -->
+    <section class="view view-home is-active" id="view-home" aria-labelledby="homeTitle">
+      <div class="hero-card">
+        <div class="hero-badge">Məktəblilər üçün emosional bələdçi</div>
+        <h1 class="hero-title" id="homeTitle">Bu gün özünü necə hiss edirsən?</h1>
+        <p class="hero-subtitle">
+          Hisslərini tanımaq özünü anlamağın ilk addımıdır. Gəl, birlikdə emosiyalarımızı kəşf edək!
+        </p>
+
+        <div class="hero-emojis" aria-hidden="true">
+          <span class="float-emoji e1">😊</span>
+          <span class="float-emoji e2">😌</span>
+          <span class="float-emoji e3">😟</span>
+          <span class="float-emoji e4">😢</span>
+          <span class="float-emoji e5">😠</span>
+          <span class="float-emoji e6">😨</span>
+        </div>
+
+        <div class="hero-actions">
+          <button type="button" class="btn btn-primary btn-lg" id="startBtn">
+            <span>Başlayaq</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+
+        <ul class="hero-highlights" aria-label="Saytın xüsusiyyətləri">
+          <li>
+            <span class="hl-icon" aria-hidden="true">🎯</span>
+            <span>6 əsas emosiya ilə tanış ol</span>
+          </li>
+          <li>
+            <span class="hl-icon" aria-hidden="true">💭</span>
+            <span>Öz hisslərini suallarla araşdır</span>
+          </li>
+          <li>
+            <span class="hl-icon" aria-hidden="true">💡</span>
+            <span>Sənə uyğun praktik tövsiyələr al</span>
+          </li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 2. Emosiyaların seçilməsi -->
+    <section class="view view-emotions" id="view-emotions" aria-labelledby="emotionsTitle" hidden>
+      <div class="panel-card">
+        <div class="panel-header">
+          <span class="step-pill">Addım 1 / 3</span>
+          <h2 class="panel-title" id="emotionsTitle">Hazırda hansı emosiyanı hiss edirsən?</h2>
+          <p class="panel-desc">Aşağıdakı kartlardan sənə ən yaxın olan birini seç.</p>
+        </div>
+
+        <div class="emotion-grid" id="emotionGrid" role="radiogroup" aria-label="Emosiya seçimi">
+          <!-- JS tərəfindən yaradılır -->
+        </div>
+
+        <p class="validation-msg" id="emotionError" role="alert" hidden></p>
+
+        <div class="panel-actions">
+          <button type="button" class="btn btn-ghost" id="emotionsBackBtn">
+            ← Ana səhifə
+          </button>
+          <button type="button" class="btn btn-primary" id="emotionsNextBtn">
+            <span>Suallara keç</span>
+            <span class="btn-arrow" aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. İnteraktiv suallar -->
+    <section class="view view-questions" id="view-questions" aria-labelledby="questionTitle" hidden>
+      <div class="panel-card">
+        <div class="selected-emotion-banner" id="selectedEmotionBanner">
+          <span class="banner-emoji" id="bannerEmoji" aria-hidden="true"></span>
+          <div class="banner-text">
+            <span class="banner-label">Seçdiyin emosiya:</span>
+            <strong class="banner-name" id="bannerName"></strong>
+          </div>
+          <button type="button" class="btn-link" id="changeEmotionBtn">Dəyiş</button>
+        </div>
+
+        <div class="question-progress-wrap">
+          <div class="question-progress-meta">
+            <span class="step-pill" id="questionStepPill">Sual 1 / 3</span>
+            <span class="question-hint-label">Seçim et və ya qısa mətn yaz</span>
+          </div>
+          <div class="progress-bar" aria-hidden="true">
+            <div class="progress-bar-fill" id="questionProgressFill"></div>
+          </div>
+        </div>
+
+        <form id="questionForm" novalidate>
+          <h2 class="question-title" id="questionTitle"></h2>
+          <p class="question-subtitle" id="questionSubtitle"></p>
+
+          <div class="options-grid" id="optionsGrid" role="group" aria-labelledby="questionTitle">
+            <!-- JS tərəfindən yaradılır -->
+          </div>
+
+          <div class="custom-input-wrap">
+            <label for="customAnswerInput" class="input-label">
+              Öz sözlərinlə əlavə et (istəyə bağlı, və ya yuxarıdakı variantları seç):
+            </label>
+            <textarea
+              id="customAnswerInput"
+              class="text-input"
+              rows="3"
+              maxlength="240"
+              placeholder="Məsələn: Mən özümü belə hiss edəndə..."
+            ></textarea>
+            <div class="input-meta">
+              <span class="char-counter" id="charCounter">0 / 240</span>
+            </div>
+          </div>
+
+          <p class="validation-msg" id="questionError" role="alert" hidden></p>
+
+          <div class="panel-actions">
+            <button type="button" class="btn btn-ghost" id="questionBackBtn">
+              ← Geri
+            </button>
+            <button type="submit" class="btn btn-primary" id="questionNextBtn">
+              <span id="questionNextLabel">Növbəti sual</span>
+              <span class="btn-arrow" aria-hidden="true">→</span>
+            </button>
+          </div>
+        </form>
+      </div>
+    </section>
+
+    <!-- 4. Nəticə və Tövsiyələr səhifəsi -->
+    <section class="view view-result" id="view-result" aria-labelledby="resultTitle" hidden>
+      <div class="panel-card result-card">
+        <div class="result-hero" id="resultHero">
+          <div class="result-emoji-badge" id="resultEmoji" aria-hidden="true"></div>
+          <div class="result-hero-text">
+            <span class="step-pill">Sənin emosiya xəritən</span>
+            <h2 class="panel-title" id="resultTitle"></h2>
+            <p class="result-lead" id="resultLead"></p>
+          </div>
+        </div>
+
+        <!-- Tövsiyələr bölməsi -->
+        <section class="advice-box" aria-labelledby="adviceHeading">
+          <div class="advice-header">
+            <span class="advice-icon" aria-hidden="true">🌟</span>
+            <h3 id="adviceHeading">Sənin üçün tövsiyələr</h3>
+          </div>
+          <p class="advice-main" id="adviceMain"></p>
+          <ul class="advice-list" id="adviceList"></ul>
+
+          <div class="breathing-box" id="breathingBox">
+            <div class="breathing-info">
+              <strong>Mini nəfəs fasiləsi</strong>
+              <p id="breathingStatus">İstəsən 4 saniyə nəfəs al, 4 saniyə saxla və 4 saniyə yavaşca burax.</p>
+            </div>
+            <div class="breathing-controls">
+              <div class="breath-circle" id="breathCircle" aria-hidden="true">
+                <span id="breathCircleText">Hazır</span>
+              </div>
+              <button type="button" class="btn btn-secondary btn-sm" id="breathToggleBtn">
+                Nəfəs məşqinə başla
+              </button>
+            </div>
+          </div>
+        </section>
+
+        <!-- Şagirdin verdiyi cavablar -->
+        <section class="summary-section" aria-labelledby="summaryHeading">
+          <h3 class="summary-heading" id="summaryHeading">Verdiyin cavablar</h3>
+          <div class="summary-list" id="summaryList">
+            <!-- JS tərəfindən yaradılır -->
+          </div>
+        </section>
+
+        <div class="disclaimer-box" role="note">
+          <strong>Vacib xatırlatma:</strong> Bu nəticə yalnız hisslərini daha yaxşı anlamağın üçün hazırlanıb. Sayt psixoloji diaqnoz qoymur və mütəxəssis yardımını əvəz etmir. Özünü uzun müddət çətin hiss edirsənsə, valideynin, müəllimin və ya məktəb psixoloqu ilə danışmaqdan çəkinmə.
+        </div>
+
+        <div class="panel-actions result-actions">
+          <button type="button" class="btn btn-ghost" id="editAnswersBtn">
+            ✎ Cavabları dəyiş
+          </button>
+          <button type="button" class="btn btn-primary btn-lg" id="restartBtn">
+            ↻ Yenidən başla
+          </button>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>
+        🔒 <strong>Məxfilik:</strong> Şəxsi məlumat toplanmır və heç bir cavab serverə göndərilmir. Cavabların yalnız bu brauzer sessiyası müddətində saxlanılır.
+      </p>
+      <p>
+        💙 Bu platforma təhsil məqsədlidir — psixoloji diaqnoz qoymur və peşəkar yardımın əvəzi deyil.
+      </p>
+    </div>
+  </footer>
+
+  <script src="data.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>
